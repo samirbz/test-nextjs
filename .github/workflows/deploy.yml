@@ -21,9 +21,10 @@ jobs:
           docker build -t ghcr.io/${{ github.repository }}:latest .
           docker push ghcr.io/${{ github.repository }}:latest
 
-      - name: Deploy to DigitalOcean VM
+      - name: Deploy to DigitalOcean VM with Root Access
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} << 'EOF'
+            sudo su
             docker pull ghcr.io/${{ github.repository }}:latest
             docker stop next-app || true
             docker rm next-app || true
